@@ -4,32 +4,32 @@ package variables;
 /**
  * Variables define storage in the computer's memory in order to manipulate data.
  * 
- * How to declare a variable:
- * data_type variable_name = some_value;
+ * How to declare a variable: data_type variable_name = some_value;
  * 
- * There are 3 types of variables in Java:
- * 1. Local: A local variable is visible or alive only within the class or method definition.
- * 2. Static: A static variable is associated to the class only and not objects of the class.
- * 3. Instance: An instance variable is associated to each object created from a class.
- *
- * Note: The 3 types of variables deal with the scope of execution of a Java program.
+ * Scope is the part of a class where a variable is accessible:
+ * 1. Class variables (member variables) are accessible to a class.
+ * 2. Local variables (method variables) are accessible to a method.
+ * 3. Block variables are accessible inside a pair of brackets { and }.
+ * 4. Instance variables (object variables) are accessible to an instance of a class.
+ * 
  */
 public class Variables
 {
-    // instance variables - replace the example below with your own
-    public static String myClassVar = "static variable";
+    public static String myClassVar = "class variable";
     public String myInstanceVar = "instance variable";
-    public String myVar = "instance level variable";
+    public String myVar = "instance variable";
 
     public static void main(String args[]) {
-        //staticVariablesMethod();
-        //instanceVariablesMethod();
-        localVariablesMethod();
+        //classVariablesMethod();
+        //localVariablesMethod();
+        //instanceVariablesMethod();        
         
     }
 
-    public static void staticVariablesMethod()
+    public static void classVariablesMethod()
     {
+        System.out.println(myClassVar);
+        
         Variables obj1 = new Variables();
         Variables obj2 = new Variables();
         Variables obj3 = new Variables();
@@ -38,11 +38,33 @@ public class Variables
         System.out.println(obj2.myClassVar);
         System.out.println(obj3.myClassVar);
         
-        obj1.myClassVar = "static variable changed!";
+        obj1.myClassVar = "obj1 variable";
+        obj2.myClassVar = "obj2 variable";
         
         System.out.println(obj1.myClassVar);
         System.out.println(obj2.myClassVar);
         System.out.println(obj3.myClassVar);
+    }
+    
+    public static void localVariablesMethod()
+    {
+        String myVar = "local method variable";
+        
+        Variables obj = new Variables();
+        
+        System.out.println(myVar);
+        System.out.println(obj.myVar);
+    }
+    
+    public static void blockVariablesMethod()
+    {
+        {
+            String myBlockVar = "block variable";
+            System.out.println(myBlockVar + " is accessible only within the brackets");
+        }
+        
+        //Uncomment the line below and see what happens
+        //System.out.println(myBlockVar);
     }
     
     public static void instanceVariablesMethod()
@@ -55,20 +77,13 @@ public class Variables
         System.out.println(obj2.myInstanceVar);
         System.out.println(obj3.myInstanceVar);
         
-        obj1.myInstanceVar = "instance variable changed for obj1!";
+        obj1.myInstanceVar = "obj1 instance variable changed!";
+        obj2.myInstanceVar = "obj2 instance variable changed...";
+        obj3.myInstanceVar = "obj3 instance variable changed!!!";
         
         System.out.println(obj1.myInstanceVar);
         System.out.println(obj2.myInstanceVar);
         System.out.println(obj3.myInstanceVar);
     }
-    
-    public static void localVariablesMethod()
-    {
-        String myVar = "local method variable";
-        
-        Variables obj = new Variables();
-        
-        System.out.println(myVar);
-        System.out.println(obj.myVar);
-    }
+
 }
