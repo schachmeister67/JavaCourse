@@ -1,15 +1,14 @@
-package minitennis;
+package minitennis8;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
+// Adding speed handling
 public class Racquet {
-	// Add constants
 	private static final int Y = 330;
 	private static final int WIDTH = 60;
 	private static final int HEIGHT = 10;
-	
 	int x = 0;
 	int xa = 0;
 	private Game game;
@@ -33,19 +32,17 @@ public class Racquet {
 	
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_LEFT)
-			xa = -1;
+			xa = -game.speed;
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-			xa = 1;
+			xa = game.speed;
 	}
 	
-	// Add Rectangle method
 	public Rectangle getBounds() {
 		return new Rectangle(x, Y, WIDTH, HEIGHT);
 	}
 	
-	// Add method to assist in collision detection
 	public int getTopY() {
-		return Y;
+		return Y - HEIGHT;
 	}
 
 }
