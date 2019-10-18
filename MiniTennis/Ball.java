@@ -1,12 +1,13 @@
-package minitennis;
+package minitennis8;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
+// Adding speed handling
 public class Ball {
-	
+	private static final int DIAMETER = 30;
 	int x = 0;
 	int y = 0;
-	// xa and ya represent the speed in which the ball is moving
 	int xa = 1;
 	int ya = 1;
 	private Game game;
@@ -17,21 +18,33 @@ public class Ball {
 	
 	public void move() {
 		if (x + xa < 0)
-			xa = 1; // move the ball to the right
-		if (x + xa > game.getWidth() - 30)
-			xa = -1; // move the ball to the left
+			xa = game.speed; // update
+		if (x + xa > game.getWidth() - DIAMETER)
+			xa = -game.speed; // update
 		if (y + ya < 0)
-			ya = 1; // move the ball down
-		if (y + ya > game.getHeight() - 30)
-			ya = -1; // move the ball up
+			ya = game.speed; // update
+		if (y + ya > game.getHeight() - DIAMETER)
+			game.gameOver();
+		if (collision()) {
+			ya = -game.speed; // update
+			y = game.racquet.getTopY() - DIAMETER;
+			game.speed++; // new
+		}
 		
-		// change the direction of the ball
 		x = x + xa;
 		y = y + ya;
 	}
 	
+	private boolean collision() {
+		return game.racquet.getBounds().intersects(getBounds());
+	}
+	
 	public void paint(Graphics g) {
 		g.fillOval(x, y, 30, 30);
+	}
+	
+	public Rectangle getBounds() {
+		return new Rectangle(x, y, DIAMETER, DIAMETER);
 	}
 
 }
