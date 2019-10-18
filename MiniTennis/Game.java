@@ -1,42 +1,51 @@
 package minitennis;
 
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-@SuppressWarnings("serial")
-public class Game extends JPanel {
+public class Racquet {
+	// Add constants
+	private static final int Y = 330;
+	private static final int WIDTH = 60;
+	private static final int HEIGHT = 10;
 	
-	Ball ball = new Ball(this);
+	int x = 0;
+	int xa = 0;
+	private Game game;
 	
-	private void move() {
-		ball.move();
+	public Racquet(Game game) {
+		this.game = game;
 	}
 	
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-		Graphics2D g2d = (Graphics2D) g;
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		ball.paint(g2d);
+	public void move() {
+		if (x + xa > 0 && x + xa < game.getWidth()-WIDTH)
+			x = x + xa;
 	}
 	
-	public static void main(String[] args) throws InterruptedException {
-		JFrame frame = new JFrame("Mini Tennis");
-		Game game = new Game();
-		frame.add(game);
-		frame.setSize(300,400);
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		while (true) {
-			game.move();
-			game.repaint();
-			Thread.sleep(10);
-		}
+	public void paint(Graphics2D g) {
+		g.fillRect(x, 330, WIDTH, HEIGHT);
+	}
+	
+	public void keyReleased(KeyEvent e) {
+		xa = 0;
+	}
+	
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_LEFT)
+			xa = -1;
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT)
+			xa = 1;
+	}
+	
+	// Add Rectangle method
+	public Rectangle getBounds() {
+		return new Rectangle(x, Y, WIDTH, HEIGHT);
+	}
+	
+	// Add method to assist in collision detection
+	public int getTopY() {
+		return Y;
 	}
 
 }
