@@ -1,4 +1,4 @@
-package minitennis8;
+package minitennis;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
