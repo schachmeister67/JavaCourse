@@ -46,8 +46,12 @@ public class PuzzleGame extends JFrame {
     public static void main(String[] args) {
 
     	// Add code here
+        EventQueue.invokeLater(() -> {
 
-      // End
+            PuzzleGame puzzle = new PuzzleGame();
+            puzzle.setVisible(true);
+        });
+        // End
     }
     
     public PuzzleGame() {
@@ -117,7 +121,15 @@ public class PuzzleGame extends JFrame {
         }
 
         // Add code here
+        Collections.shuffle(buttons);
+        buttons.add(lastButton);
 
+        for (int i = 0; i < NUMBER_OF_BUTTONS; i++) {
+        	MyButton btn = buttons.get(i);
+            panel.add(btn);
+            btn.setBorder(BorderFactory.createLineBorder(Color.gray));
+            btn.addActionListener(new ClickAction());
+        }
         // End
         
         pack();
@@ -138,22 +150,38 @@ public class PuzzleGame extends JFrame {
     private BufferedImage loadImage() throws IOException {
 
     	// Add code here
-        
-      // End
+        BufferedImage bimg = ImageIO.read(new File("src/resources/icesid.jpg"));
+
+        return bimg;
+        // End
     }
 
     private BufferedImage resizeImage(BufferedImage originalImage, int width,
                                       int height, int type) {
     	// Add code here
+        BufferedImage resizedImage = new BufferedImage(width, height, type);
+        Graphics2D g = resizedImage.createGraphics();
+        g.drawImage(originalImage, 0, 0, width, height, null);
+        g.dispose();
 
-      // End
+        return resizedImage;
+        // End
     }
 
     private void checkSolution() {
 
     	// Add code here
+        ArrayList<Point> current = new ArrayList<Point>();
 
-      // End
+        for (JComponent btn : buttons) {
+            current.add((Point) btn.getClientProperty("position"));
+        }
+
+        if (compareList(solution, current)) {
+            JOptionPane.showMessageDialog(panel, "Finished",
+                    "Congratulation", JOptionPane.INFORMATION_MESSAGE);
+        }
+        // End
     }
 
     public static boolean compareList(List<Point> ls1, List<Point> ls2) {
