@@ -123,8 +123,28 @@ public class ATM extends JFrame {
 
     // Action listener for the Withdraw button
     class WithdrawButtonListener implements ActionListener {
-
-
+	@Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                // First checks for negative number and increment of 20
+                if (getEntryValue() > 0 && getEntryValue() % 20 == 0) {
+                    // Checks radio selection
+                    if (checkingRadio.isSelected()) {
+                        checking.withdraw(getEntryValue());
+                        JOptionPane.showMessageDialog(frame, df.format(getEntryValue()) +
+                                " withdrawn from Checking.");
+                    } else if (savingsRadio.isSelected()) {
+                        savings.withdraw(getEntryValue());
+                        JOptionPane.showMessageDialog(frame, df.format(getEntryValue()) +
+                                " withdrawn from Savings.");
+                    }
+                    clearEntryValue();
+                } else errorValidNumber();
+                clearEntryValue();
+            } catch (InsufficientFunds insufficientFunds) {
+                System.out.println("Caught in main.");
+            }
+        }
     }
 
     // Action listener for the Deposit button
