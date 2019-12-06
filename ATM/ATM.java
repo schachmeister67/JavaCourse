@@ -73,36 +73,36 @@ public class ATM extends JFrame {
         super("ATM Machine");
         setFrame(WINDOWWIDTH, WINDOWHEIGHT);
         
-       setLayout(new GridBagLayout());
-       GridBagConstraints layout = new GridBagConstraints();
-       JPanel buttonPanel = new JPanel();
-       JPanel textEntry = new JPanel();
-       setResizable(false);
-       layout.gridy = 2;
-       add(buttonPanel);
-       add(textEntry, layout);
-       buttonPanel.setLayout(new GridLayout(3, 2, 10, 10));
-       textEntry.setLayout(new GridLayout(1, 1));
-       buttonPanel.add(withdrawButton);
-       buttonPanel.add(depositButton);
-       buttonPanel.add(transferToButton);
-       buttonPanel.add(balanceButton);
-       radios.add(checkingRadio);
-       radios.add(savingsRadio);
-       buttonPanel.add(checkingRadio);
-       buttonPanel.add(savingsRadio);
-       entry.setPreferredSize(new Dimension(TEXTWIDTH, TEXTHEIGHT));
-       checkingRadio.setSelected(true);
-       textEntry.add(entry);
+        setLayout(new GridBagLayout());
+        GridBagConstraints layout = new GridBagConstraints();
+        JPanel buttonPanel = new JPanel();
+        JPanel textEntry = new JPanel();
+        setResizable(false);
+        layout.gridy = 2;
+        add(buttonPanel);
+        add(textEntry, layout);
+        buttonPanel.setLayout(new GridLayout(3, 2, 10, 10));
+        textEntry.setLayout(new GridLayout(1, 1));
+        buttonPanel.add(withdrawButton);
+        buttonPanel.add(depositButton);
+        buttonPanel.add(transferToButton);
+        buttonPanel.add(balanceButton);
+        radios.add(checkingRadio);
+        radios.add(savingsRadio);
+        buttonPanel.add(checkingRadio);
+        buttonPanel.add(savingsRadio);
+        entry.setPreferredSize(new Dimension(TEXTWIDTH, TEXTHEIGHT));
+        checkingRadio.setSelected(true);
+        textEntry.add(entry);
 
-       // Creates the checking and savings accounts
-       makeAccounts(checkingStartingBalance, savingsStartingBalance);
+        // Creates the checking and savings accounts
+        makeAccounts(checkingStartingBalance, savingsStartingBalance);
 
-       // Action listeners
-       withdrawButton.addActionListener(new WithdrawButtonListener());
-       depositButton.addActionListener(new DepositButtonListener());
-       transferToButton.addActionListener(new TransferToButtonListener());
-       balanceButton.addActionListener(new BalanceButtonListener());
+        // Action listeners
+        withdrawButton.addActionListener(new WithdrawButtonListener());
+        depositButton.addActionListener(new DepositButtonListener());
+        transferToButton.addActionListener(new TransferToButtonListener());
+        balanceButton.addActionListener(new BalanceButtonListener());
     }
     
     public static void main(String[] args) {
@@ -123,7 +123,8 @@ public class ATM extends JFrame {
 
     // Action listener for the Withdraw button
     class WithdrawButtonListener implements ActionListener {
-	@Override
+
+        @Override
         public void actionPerformed(ActionEvent e) {
             try {
                 // First checks for negative number and increment of 20
@@ -150,19 +151,77 @@ public class ATM extends JFrame {
     // Action listener for the Deposit button
     class DepositButtonListener implements ActionListener {
 
-
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // First checks for positive number
+            if (getEntryValue() > 0) {
+                // Then checks for radio selection
+                if (checkingRadio.isSelected()) {
+                    checking.deposit(getEntryValue());
+                    JOptionPane.showMessageDialog(frame, df.format(getEntryValue()) +
+                            " deposited into Checking.");
+                } else if (savingsRadio.isSelected()) {
+                    savings.deposit(getEntryValue());
+                    JOptionPane.showMessageDialog(frame, df.format(getEntryValue()) +
+                            " deposited into Savings.");
+                }
+                clearEntryValue();
+            } else errorValidNumber();
+            clearEntryValue();
+        }
     }
 
     // Action listener for the Transfer To button
     class TransferToButtonListener implements ActionListener {
 
-
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                // First checks for positive number
+                if (getEntryValue() > 0) {
+                    // Then checks for radio selection
+                    if (checkingRadio.isSelected()) {
+                        // Separate methods for transferFrom and transferTo
+                    	checking.transferFrom(getEntryValue());
+                        savings.transferTo(getEntryValue());
+                        //savings.transferFrom(getEntryValue());
+                        //checking.transferTo(getEntryValue());
+                        JOptionPane.showMessageDialog(frame, df.format(getEntryValue()) +
+                                " transferred from Checking to Savings.");
+                    } else if (savingsRadio.isSelected()) {
+                    	savings.transferFrom(getEntryValue());
+                        checking.transferTo(getEntryValue());
+                        //checking.transferFrom(getEntryValue());
+                        //savings.transferTo(getEntryValue());
+                        JOptionPane.showMessageDialog(frame, df.format(getEntryValue()) +
+                                " transferred from Savings to Checking.");
+                    }
+                    clearEntryValue();
+                } else errorValidNumber();
+                clearEntryValue();
+            } catch (InsufficientFunds insufficientFunds) {
+                System.out.println("Caught in main.");
+            }
+        }
     }
 
     // Action listener for the Transfer To button
     class BalanceButtonListener implements ActionListener {
 
- 
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Only checks for radio selection
+            if (checkingRadio.isSelected()) {
+                JOptionPane.showMessageDialog(frame,
+                        "Your checking account balance is: \n" +
+                                df.format(checking.getBalance()));
+            } else if (savingsRadio.isSelected()) {
+                JOptionPane.showMessageDialog(frame,
+                        "Your savings account balance is: \n" +
+                                df.format(savings.getBalance()));
+            } else errorValidNumber();
+            clearEntryValue();
+        }
     }
     
     /**
